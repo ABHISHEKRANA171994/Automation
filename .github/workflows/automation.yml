@@ -24,19 +24,15 @@ jobs:
         with:
           terraform_version: 1.5.0  # Use the latest version of Terraform
 
-      - name: Prepare Terraform Variables
-        id: prepare_vars
+      - name: Generate Terraform Variables
+        id: vars
         run: |
-          # Split the comma-separated repo names into an array and format it for Terraform
-          IFS=',' read -r -a repo_array <<< "${{ github.event.inputs.repo_names }}"
-          formatted_repos=$(printf '%s\n' "${repo_array[@]}" | jq -R . | jq -s .)
-          echo "REPO_NAMES=${formatted_repos}" >> $GITHUB_ENV
-          echo "GITHUB_TOKEN=${{ github.event.inputs.github_token }}" >> $GITHUB_ENV
+          # Convert comma-separated list into Terraform-compatible format
+          repo_names=$(echo "${{ github.event.inputs.repo_names }}" | awk -vORS=, '{ print "\"" $0 "\""}' | sed 's/,$//')
+          echo "repo_names = [${repo_names}]" > terraform.tfvars
 
-      - name: Configure Terraform
-        run: |
-          echo "github_token = \"${{ env.GITHUB_TOKEN }}\"" > terraform.tfvars
-          echo "repo_names = ${REPO_NAMES}" >> terraform.tfvars
+          # Export the GitHub token for Terraform
+          echo "github_token = \"${{ github.event.inputs.github_token }}\"" >> terraform.tfvars
 
       - name: Terraform Init
         run: terraform init
@@ -44,4 +40,4 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve
         env:
-          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.event.inputs.github_token }}

@@ -1,0 +1,38 @@
+name: Create GitHub Repositories
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo_names:
+        description: 'Comma-separated list of repository names to create'
+        required: true
+        default: 'repo-1,repo-2,repo-3'
+      github_token:
+        description: 'GitHub personal access token'
+        required: true
+        secret: true
+
+jobs:
+  create-repos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0  # Use the latest version of Terraform
+
+      - name: Configure Terraform
+        run: |
+          echo "github_token = \"${{ github.event.inputs.github_token }}\"" > terraform.tfvars
+          echo "repo_names = [${{ github.event.inputs.repo_names }}]" >> terraform.tfvars
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        env:
+          GITHUB_TOKEN: ${{ github.event.inputs.github_token }}

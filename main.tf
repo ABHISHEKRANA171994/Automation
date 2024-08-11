@@ -2,12 +2,7 @@ provider "github" {
   token = var.github_token
 }
 
-# Define a list of repository names
-variable "repo_names" {
-  description = "List of repository names to create."
-  type        = list(string)
-}
-
+# Define the GitHub repository with a unique name using the provided list
 resource "github_repository" "example" {
   count       = length(var.repo_names)
   name        = var.repo_names[count.index]
@@ -18,4 +13,9 @@ resource "github_repository" "example" {
 variable "github_token" {
   description = "The GitHub personal access token."
   type        = string
+}
+
+variable "repo_names" {
+  description = "List of repository names to create."
+  type        = list(string)
 }

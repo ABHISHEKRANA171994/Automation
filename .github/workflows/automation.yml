@@ -27,7 +27,7 @@ jobs:
       - name: Configure Terraform
         run: |
           echo "github_token = \"${{ github.event.inputs.github_token }}\"" > terraform.tfvars
-          echo "repo_names = [${{ github.event.inputs.repo_names }}]" >> terraform.tfvars
+          echo "repo_names = [${{ github.event.inputs.repo_names | split(',') | join(',') }}]" >> terraform.tfvars
 
       - name: Terraform Init
         run: terraform init

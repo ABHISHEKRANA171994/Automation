@@ -34,10 +34,6 @@ jobs:
           # Export the GitHub token for Terraform
           echo "github_token = \"${{ github.event.inputs.my_github_token }}\"" >> terraform.tfvars
 
-      - name: Debug: Check Environment Variables
-        run: |
-          echo "MY_GITHUB_TOKEN=${{ github.event.inputs.my_github_token }}"
-
       - name: Terraform Init
         run: terraform init
 

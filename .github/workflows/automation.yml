@@ -7,7 +7,7 @@ on:
         description: 'Comma-separated list of repository names to create'
         required: true
         default: 'repo-1,repo-2,repo-3'
-      github_token:
+      my_github_token:
         description: 'GitHub personal access token'
         required: true
         secret: true
@@ -32,7 +32,11 @@ jobs:
           echo "repo_names = [${repo_names}]" > terraform.tfvars
 
           # Export the GitHub token for Terraform
-          echo "github_token = \"${{ github.event.inputs.github_token }}\"" >> terraform.tfvars
+          echo "github_token = \"${{ github.event.inputs.my_github_token }}\"" >> terraform.tfvars
+
+      - name: Debug: Check Environment Variables
+        run: |
+          echo "MY_GITHUB_TOKEN=${{ github.event.inputs.my_github_token }}"
 
       - name: Terraform Init
         run: terraform init
@@ -40,4 +44,4 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve
         env:
-          GITHUB_TOKEN: ${{ github.event.inputs.github_token }}
+          GITHUB_TOKEN: ${{ github.event.inputs.my_github_token }}

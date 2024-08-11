@@ -1,4 +1,4 @@
-name: Create GitHub Repositories test
+name: Create GitHub Repositories
 
 on:
   workflow_dispatch:

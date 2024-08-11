@@ -7,7 +7,7 @@ resource "github_repository" "example" {
   count       = length(var.repo_names)
   name        = var.repo_names[count.index]
   description = "This is a dynamically created repository."
-  private     = false
+  visibility  = "public"  # Use 'private', 'public', or 'internal'
 }
 
 variable "github_token" {

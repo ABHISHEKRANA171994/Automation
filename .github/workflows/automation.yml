@@ -7,10 +7,6 @@ on:
         description: 'Comma-separated list of email addresses'
         required: true
         type: string
-      action:
-        description: 'Action to perform'
-        required: true
-        type: string
 
 jobs:
   create-repositories:

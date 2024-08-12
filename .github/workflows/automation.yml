@@ -36,9 +36,8 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      # Apply Terraform configuration to create repositories if 'create' action is selected
+      # Apply Terraform configuration to create repositories
       - name: Terraform Apply
-        if: ${{ github.event.inputs.action == 'create' }}
         run: terraform apply -auto-approve
         env:
           MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

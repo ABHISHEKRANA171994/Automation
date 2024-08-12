@@ -7,7 +7,7 @@ resource "github_repository" "new_repos" {
   count        = length(local.repo_names)
   name         = local.repo_names[count.index]
   visibility   = "private"  # Use "private" for non-Enterprise GitHub organizations
-  description  = "Repository created via Terraform. This repository is used for [specific purpose], ensuring automated and consistent creation of repositories."
+  description  = "Repository created via Terraform. This repository is used for automated and consistent creation of repositories."
   auto_init    = true
 }
 

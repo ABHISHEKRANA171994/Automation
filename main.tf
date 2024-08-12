@@ -36,7 +36,7 @@ locals {
   formatted_date = formatdate("02-01-06", timestamp())
   repo_names = flatten([
     for email in var.emails : [
-      for i in range(var.repo_count_per_email) : "TEST_${replace(split("@", email)[0], ".", "_")}_${local.formatted_date}_${i + 1}"
+      for i in range(var.repo_count_per_email) : "TEST_${replace(split("@", email)[0], ".", "_")}_${local.formatted_date}"
     ]
   ])
 }

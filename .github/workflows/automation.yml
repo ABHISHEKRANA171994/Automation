@@ -22,7 +22,7 @@ jobs:
 
       - name: Prepare Terraform Variables
         run: |
-          # Prepare the email list as a Terraform variable
+          # Prepare the email list and GitHub token as Terraform variables
           echo "github_token = \"${{ secrets.MY_GITHUB_TOKEN }}\"" > terraform.tfvars
           echo "github_organization = \"${{ secrets.GITHUB_REPOSITORY_OWNER }}\"" >> terraform.tfvars
           echo "emails = [\"${{ github.event.inputs.emails }}\"]" >> terraform.tfvars

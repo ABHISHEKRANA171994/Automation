@@ -24,7 +24,7 @@ jobs:
         run: |
           echo "github_token = \"${{ secrets.MY_GITHUB_TOKEN }}\"" > terraform.tfvars
           echo "my_github_organization = \"${{ secrets.MY_GITHUB_ORGANIZATION }}\"" >> terraform.tfvars
-          echo "emails = [\"${{ github.event.inputs.emails }}\"]" >> terraform.tfvars
+          echo "emails = [\"$(echo ${{ github.event.inputs.emails }} | tr ',' '\",\"')\"]" >> terraform.tfvars
 
       - name: Terraform Init
         run: terraform init

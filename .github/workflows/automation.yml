@@ -10,10 +10,7 @@ on:
       action:
         description: 'Action to perform'
         required: true
-        type: choice
-        options:
-          - create
-          - destroy
+        type: string
 
 jobs:
   create-repositories:

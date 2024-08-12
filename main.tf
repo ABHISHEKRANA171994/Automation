@@ -33,10 +33,13 @@ variable "repo_count_per_email" {
 }
 
 locals {
+   # Get the current timestamp in the format DD-MM-YY
   formatted_date = formatdate("02-01-06", timestamp())
+
+  # Create repository names based on the email addresses and current date
   repo_names = flatten([
     for email in var.emails : [
-      for i in range(var.repo_count_per_email) : "TEST_${replace(split("@", email)[0], ".", ".")}_${local.formatted_date}"
+       for i in range(var.repo_count_per_email) : "Test_${split("@", email)[0]}_${local.formatted_date}_"
     ]
   ])
 }

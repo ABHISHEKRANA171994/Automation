@@ -32,4 +32,4 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve
         env:
-          MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}  # Ensure this matches the token used in Terraform
+          MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

@@ -1,12 +1,12 @@
 provider "github" {
   token = var.github_token
-  owner = var.github_organization  # Use 'owner' instead of 'organization'
+  owner = var.my_github_organization
 }
 
 resource "github_repository" "new_repos" {
   count        = length(local.repo_names)
   name         = local.repo_names[count.index]
-  visibility   = "private"  # Use "private" for non-Enterprise GitHub organizations
+  visibility   = "private"  # Adjust as needed
   description  = "Repository created via Terraform. This repository is used for automated and consistent creation of repositories."
   auto_init    = true
 }
@@ -16,7 +16,7 @@ variable "github_token" {
   type        = string
 }
 
-variable "github_organization" {
+variable "my_github_organization" {
   description = "GitHub Organization Name"
   type        = string
 }
@@ -33,10 +33,7 @@ variable "repo_count_per_email" {
 }
 
 locals {
-  # Generate a unique date in DD-MM-YY format
   formatted_date = formatdate("02-01-06", timestamp())
-
-  # Generate repository names based on email addresses and count
   repo_names = flatten([
     for email in var.emails : [
       for i in range(var.repo_count_per_email) : "TEST_${replace(split("@", email)[0], ".", "_")}_${local.formatted_date}_${i + 1}"

@@ -22,9 +22,8 @@ jobs:
 
       - name: Prepare Terraform Variables
         run: |
-          # Prepare the email list and GitHub token as Terraform variables
           echo "github_token = \"${{ secrets.MY_GITHUB_TOKEN }}\"" > terraform.tfvars
-          echo "github_organization = \"${{ secrets.GITHUB_REPOSITORY_OWNER }}\"" >> terraform.tfvars
+          echo "my_github_organization = \"${{ secrets.MY_GITHUB_ORGANIZATION }}\"" >> terraform.tfvars
           echo "emails = [\"${{ github.event.inputs.emails }}\"]" >> terraform.tfvars
 
       - name: Terraform Init
@@ -33,4 +32,4 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve
         env:
-          MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}  # Use your custom GitHub token from secrets
+          MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}  # Ensure this matches the token used in Terraform

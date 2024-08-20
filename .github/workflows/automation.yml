@@ -1,43 +1,31 @@
-name: GitHub Repo Management Automation
+name: Repository Creation Automation
 
 on:
-  workflow_dispatch:
-    inputs:
-      emails:
-        description: 'Comma-separated list of email addresses'
-        required: true
-        type: string
+  repository_dispatch:
+    types: [repository_creation]
 
 jobs:
   create-repositories:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up Terraform with the specified version
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.4.0  # Specify your required Terraform version
+          terraform_version: 1.4.0
 
-      # Prepare Terraform variables based on user inputs
       - name: Prepare Terraform Variables
         run: |
-          # Write GitHub token to terraform.tfvars
           echo "github_token = \"${{ secrets.MY_GITHUB_TOKEN }}\"" > terraform.tfvars
-          # Write GitHub organization name to terraform.tfvars
           echo "my_github_organization = \"${{ secrets.MY_GITHUB_ORGANIZATION }}\"" >> terraform.tfvars
-          # Write email addresses to terraform.tfvars
-          echo "emails = [\"$(echo ${{ github.event.inputs.emails }} | tr ',' '\",\"')\"]" >> terraform.tfvars
+          echo "emails = [\"$(echo ${{ github.event.client_payload.emails }} | tr ',' '\",\"')\"]" >> terraform.tfvars
 
-      # Initialize Terraform configuration
       - name: Terraform Init
         run: terraform init
 
-      # Apply Terraform configuration to create repositories
       - name: Terraform Apply
         run: terraform apply -auto-approve
         env:
